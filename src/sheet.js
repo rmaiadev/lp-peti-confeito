@@ -43,9 +43,9 @@ const GLOW = {
       /drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/
     )
   
-    return m
-      ? `https://lh3.googleusercontent.com/d/${m[1]}=w900`
-      : value
+    if (m) return `https://lh3.googleusercontent.com/d/${m[1]}=w900`
+    if (u.startsWith('/') && !u.startsWith('//')) return import.meta.env.BASE_URL + u.slice(1)
+    return u
   }
   
   // Lê a aba em CSV e localiza a linha de cabeçalho (o Google às vezes "engole" ou desloca o cabeçalho).
