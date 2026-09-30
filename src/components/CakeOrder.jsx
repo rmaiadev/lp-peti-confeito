@@ -25,7 +25,6 @@ export default function CakeOrder({ cfg }) {
   const { whatsapp, boloTitulo, boloTexto } = useContext(SiteContext)
   const [themeKey, setThemeKey] = useState('classico')
   const [sk, setSk] = useState(null)
-  const [ck, setCk] = useState(null)
   const [fk, setFk] = useState(null)
   const [msg, setMsg] = useState('')
   const [date, setDate] = useState('')
@@ -41,14 +40,13 @@ export default function CakeOrder({ cfg }) {
     const classicas = items.filter((o) => o.tema === 'classico')
     return classicas.length ? classicas : items
   }
-  const sizes = pick(cfg.sizes), covers = pick(cfg.covers), fills = pick(cfg.fills)
+  const sizes = pick(cfg.sizes), fills = pick(cfg.fills)
 
   const mudarTema = (key) => {
-    setThemeKey(key); setSk(null); setCk(null); setFk(null)
+    setThemeKey(key); setSk(null); setFk(null)
   }
 
   const size = sizes.find((o) => o.k === sk) || sizes[Math.min(1, sizes.length - 1)]
-  const cover = covers.find((o) => o.k === ck) || covers[0]
   const fill = fills.find((o) => o.k === fk) || fills[0]
 
   const fotoSt = useFoto(theme.foto)
@@ -56,7 +54,7 @@ export default function CakeOrder({ cfg }) {
 
   const min = new Date(Date.now() + cfg.dias * 864e5)
   const minISO = new Date(min.getTime() - min.getTimezoneOffset() * 6e4).toISOString().slice(0, 10)
-  const total = (size?.p || 0) + (cover?.p || 0) + (fill?.p || 0)
+  const total = (size?.p || 0) + (fill?.p || 0)
 
   const enviar = () => {
     const [a, m, d] = date.split('-')
@@ -65,7 +63,6 @@ export default function CakeOrder({ cfg }) {
       `- Tema: ${theme.n}`,
       theme.d ? `- Estilo: ${theme.d}` : null,
       `- Tamanho: ${size.n}${size.s ? ` (${size.s})` : ''}`,
-      `- Cobertura: ${cover.n}`,
       `- Recheio: ${fill.n}`,
       msg ? `- Mensagem no bolo: "${msg}"` : null,
       referencia ? `- Referência: ${referencia}` : null,
@@ -112,7 +109,6 @@ export default function CakeOrder({ cfg }) {
             </fieldset>
 
             <Group label="Tamanho" items={sizes} value={size} set={setSk} extra={(o) => o.s} />
-            <Group label="Cobertura" items={covers} value={cover} set={setCk} sw />
             <Group label="Recheio" items={fills} value={fill} set={setFk} sw />
 
             <fieldset className="grp">
@@ -123,8 +119,8 @@ export default function CakeOrder({ cfg }) {
             </fieldset>
 
             <fieldset className="grp">
-              <legend>Nome ou mensagem no bolo</legend>
-              <input className="inp" maxLength={18} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Ex.: Parabéns, Lu!" />
+              <legend>Nome</legend>
+              <input className="inp" maxLength={18} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Ex.: Priscila" />
             </fieldset>
 
             <fieldset className="grp">
